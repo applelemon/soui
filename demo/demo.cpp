@@ -6,7 +6,6 @@
 #include <helper/mybuffer.h>
 #include "httpsvr/HTTPServer.h"
 #include "MemFlash.h"
-#include "../controls.extend/propgrid/SPropertyGrid.h"
 #include "../controls.extend/SFadeFrame.h"
 #include "../controls.extend/sradiobox2.h"
 #include "../controls.extend/SVscrollbar.h"
@@ -172,9 +171,13 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*
         bLoaded=pComMgr->CreateTranslator((IObjRef**)&trans);
         SASSERT_FMT(bLoaded,_T("load interface [%s] failed!"),_T("translator"));
 
-        if(pComMgr->CreateLog4z((IObjRef**)&pLogMgr))
-        if(pLogMgr){
-            pLogMgr->createLogger("soui");//support output soui trace infomation to log
+        if(pComMgr->CreateLog4z((IObjRef**)&pLogMgr) && pLogMgr)
+        {
+			//uncomment next line to disable log mgr to output debug string.
+			//pLogMgr->setLoggerDisplay(LOG4Z_MAIN_LOGGER_ID,false);	
+			
+			//uncomment next line to record info level log.
+			//pLogMgr->setLoggerLevel(LOG4Z_MAIN_LOGGER_ID,ILog4zManager::LOG_LEVEL_INFO);	
             pLogMgr->start();
         }
         

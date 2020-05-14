@@ -740,10 +740,10 @@ void CMainDlg::OnBtnFileWnd()
 void CMainDlg::OnUrlReNotify(EventArgs *pEvt)
 {
     EventRENotify *pEvt2 = sobj_cast<EventRENotify>(pEvt);
-    STRACE(_T("OnUrlReNotify,iNotify = %d"),pEvt2->iNotify);
+    SLOGFMTD(_T("OnUrlReNotify,iNotify = %d"),pEvt2->iNotify);
     if(pEvt2->iNotify == EN_CHANGE)
     {
-        STRACE(_T("OnUrlReNotify,iNotify = EN_CHANGE"));    
+        SLOGFMTD(_T("OnUrlReNotify,iNotify = EN_CHANGE"));    
     }
 }
 
@@ -761,7 +761,7 @@ void CMainDlg::OnMclvCtxMenu(EventArgs *pEvt)
         {
             int iItem = pItem->GetItemIndex();
             pListview->SetSel(iItem);
-            STRACE(_T("当前选中行:%d"),iItem);
+            SLOGFMTD(_T("当前选中行:%d"),iItem);
         }
         
     }
@@ -1094,6 +1094,25 @@ void CMainDlg::On3dViewRotate(EventArgs *e)
 		{
 			p3dView->SetAttribute(L"rotateDir",e->nameFrom);
 		}
+	}
+}
+
+void CMainDlg::OnSetPropItemValue()
+{
+	SPropertyGrid * pPropGrid = FindChildByID2<SPropertyGrid>(R.id.prop_test);
+	SASSERT(pPropGrid);
+
+	SStringW strTarget = S_CT2W(FindChildByID(R.id.prop_target)->GetWindowText());
+	SStringW strProp = S_CT2W(FindChildByID(R.id.prop_prop)->GetWindowText());
+	SStringW strValue = S_CT2W(FindChildByID(R.id.prop_value)->GetWindowText());
+
+	IPropertyItem *pItem = pPropGrid->FindItemByName(strTarget);
+	if(pItem)
+	{
+		pPropGrid->SetItemAttribute(pItem,strProp,strValue);
+	}else
+	{
+		SMessageBox(m_hWnd,_T("target item not found!"),_T("error"),MB_OK|MB_ICONSTOP);
 	}
 }
 
